@@ -10,27 +10,44 @@
         /* Custom styles for better aesthetics and font */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #e2e8f0; /* Softer light blue-gray background */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align content to the top */
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px; /* Slightly wider container */
+            width: 100%;
         }
         .poll-item {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            border: 1px solid #cbd5e1; /* Subtle border */
         }
         .poll-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-5px) scale(1.02); /* More pronounced lift and slight scale */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* Stronger shadow on hover */
+            background-color: #f8fafc; /* Slightly lighter background on hover */
+        }
+        .poll-link {
+            transition: color 0.2s ease-in-out;
+        }
+        .poll-link:hover {
+            color: #4338ca; /* Darker indigo on hover */
+        }
+        /* Gradient for the header */
+        .header-gradient {
+            background-image: linear-gradient(to right, #6366f1, #8b5cf6); /* Indigo to Purple gradient */
         }
     </style>
 </head>
 <body class="antialiased text-gray-800">
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-4xl font-extrabold text-center text-blue-700 mb-8 mt-4 rounded-lg p-3 bg-white shadow-lg">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white text-center mb-10 mt-6 rounded-xl p-5 header-gradient shadow-2xl tracking-tight">
             IMDb User Polls
         </h1>
 
-        <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Polls will be dynamically loaded here -->
         </div>
     </div>
@@ -83,11 +100,12 @@
 
                         // Create a new div element for each poll
                         const pollItem = document.createElement('div');
-                        pollItem.className = 'poll-item bg-white p-5 rounded-lg shadow-md hover:shadow-xl flex flex-col space-y-2'; // Changed to flex-col for better detail display
+                        // Updated Tailwind classes for a more appealing card design
+                        pollItem.className = 'poll-item bg-white p-6 rounded-xl shadow-lg flex flex-col space-y-3';
 
                         // Create and append elements for each detail
                         const numberElement = document.createElement('p');
-                        numberElement.className = 'text-sm font-bold text-gray-500';
+                        numberElement.className = 'text-sm font-bold text-gray-500 mb-1';
                         numberElement.textContent = `#${pollNumber}`;
                         pollItem.appendChild(numberElement);
 
@@ -95,18 +113,20 @@
                         titleLink.href = pollUrl;
                         titleLink.textContent = pollTitle;
                         titleLink.target = '_blank';
-                        titleLink.className = 'text-lg font-semibold text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50';
+                        // Updated Tailwind classes for the link
+                        titleLink.className = 'poll-link text-xl font-bold text-indigo-700 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75';
                         pollItem.appendChild(titleLink);
 
                         const detailsContainer = document.createElement('div');
-                        detailsContainer.className = 'text-sm text-gray-600 grid grid-cols-2 gap-x-4 gap-y-1'; // Grid for better alignment of details
+                        // Updated Tailwind classes for the details grid
+                        detailsContainer.className = 'text-sm text-gray-700 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 mt-2';
 
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Date:</span> ${pollDate}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Votes:</span> ${pollVotes}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Type:</span> ${pollType}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Options:</span> ${pollOptions}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Featured:</span> ${pollFeatured}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-medium">Status:</span> ${pollStatus}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Date:</span> ${pollDate}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Votes:</span> ${pollVotes}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Type:</span> ${pollType}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Options:</span> ${pollOptions}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Featured:</span> ${pollFeatured}</p>`;
+                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Status:</span> ${pollStatus}</p>`;
 
                         pollItem.appendChild(detailsContainer);
 
