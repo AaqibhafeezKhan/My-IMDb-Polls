@@ -6,46 +6,182 @@
     <title>IMDb Polls</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for better aesthetics and font */
+        /* Custom styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e2e8f0; /* Softer light blue-gray background */
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align content to the top */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .container {
-            max-width: 1000px; /* Slightly wider container */
+            max-width: 1200px;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
+
         .poll-item {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
-            border: 1px solid #cbd5e1; /* Subtle border */
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            position: relative;
+            overflow: hidden;
         }
+
+        .poll-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.6s;
+        }
+
+        .poll-item:hover::before {
+            left: 100%;
+        }
+
         .poll-item:hover {
-            transform: translateY(-5px) scale(1.02); /* More pronounced lift and slight scale */
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* Stronger shadow on hover */
-            background-color: #f8fafc; /* Slightly lighter background on hover */
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.98);
         }
+
         .poll-link {
-            transition: color 0.2s ease-in-out;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
         }
+
         .poll-link:hover {
-            color: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-2px);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        /* Gradient for the header */
+
         .header-gradient {
-            background-image: linear-gradient(to right, #6366f1, #8b5cf6); /* Indigo to Purple gradient */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .detail-badge {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .detail-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .poll-number {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .loading-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body class="antialiased text-gray-800">
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-white text-center mb-10 mt-6 rounded-xl p-5 header-gradient shadow-2xl tracking-tight">
-            IMDb User Polls
-        </h1>
+        <header class="text-center mb-12">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-4 header-gradient rounded-2xl p-8 shadow-2xl tracking-tight">
+                🎬 IMDb User Polls
+            </h1>
+            <p class="text-lg sm:text-xl text-white/90 font-medium max-w-2xl mx-auto">
+                Discover and explore the most engaging polls from the IMDb community
+            </p>
+        </header>
 
         <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Polls will be dynamically loaded here -->
@@ -61,6 +197,7 @@
          */
         function displayPollsFromStaticHtml() {
             // Combined HTML content from polls 1-131
+
             const htmlText = `
                 <tr class="odd"><td>1</td><td><a target="_blank" href="https://www.imdb.com/poll/P-naOk64Gik">Saturn Award 2016: Best Science Fiction Film</a></td><td class="sorting_1">2016/06/01</td><td>2,485</td><td>Titles</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>2</td><td><a target="_blank" href="https://www.imdb.com/poll/tK3w5lo9yzo">Saturn Award 2016: Best Animated Film</a></td><td class="sorting_1">2016/06/16</td><td>3,374</td><td>Titles</td><td>6</td><td>Yes (1)</td><td>Live</td></tr><tr class="odd"><td>3</td><td><a target="_blank" href="https://www.imdb.com/poll/NF6dnhIKpig">Favorite Movie Shot in Chronological Order</a></td><td class="sorting_1">2016/06/18</td><td>2,336</td><td>Titles</td><td>30</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>4</td><td><a target="_blank" href="https://www.imdb.com/poll/jPdiQG75GDo">Primetime Emmy Awards 2016 : Best Lead Actor in a Limited Series</a></td><td class="sorting_1">2016/08/29</td><td>871</td><td>People</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>5</td><td><a target="_blank" href="https://www.imdb.com/poll/esBxHV5shF4">Primetime Emmy Awards 2016 : Best Lead Actress in a Limited Series</a></td><td class="sorting_1">2016/09/02</td><td>654</td><td>People</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>6</td><td><a target="_blank" href="https://www.imdb.com/poll/Ly9e5JSnAY0">Primetime Emmy Awards 2016 : Outstanding Animated Program</a></td><td class="sorting_1">2016/09/11</td><td>811</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>7</td><td><a target="_blank" href="https://www.imdb.com/poll/djsTksJ0ykg">Golden Globes 2017 - Best Director, Motion Picture</a></td><td class="sorting_1">2016/12/26</td><td>6,702</td><td>People</td><td>5</td><td>Yes (1)</td><td>Live</td></tr><tr class="even"><td>8</td><td><a target="_blank" href="https://www.imdb.com/poll/_GNb4-BIwNc">Golden Globes 2017 - Best Screenplay, Motion Picture</a></td><td class="sorting_1">2016/12/29</td><td>14,278</td><td>Titles</td><td>5</td><td>Yes (1)</td><td>Live</td></tr><tr class="odd"><td>9</td><td><a target="_blank" href="https://www.imdb.com/poll/pmRRv-vKHTI">Best Movie by Year on Rotten Tomatoes (1950-1984)</a></td><td class="sorting_1">2017/01/02</td><td>1,290</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>10</td><td><a target="_blank" href="https://www.imdb.com/poll/h8vYKSxVfW0">Best Movie by Year on Rotten Tomatoes (1985-2016)</a></td><td class="sorting_1">2017/01/03</td><td>3,422</td><td>Titles</td><td>32</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>11</td><td><a target="_blank" href="https://www.imdb.com/poll/3EANIBcQvdM">Golden Globes 2017 - Best Original Score, Motion Picture</a></td><td class="sorting_1">2017/01/04</td><td>1,132</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>12</td><td><a target="_blank" href="https://www.imdb.com/poll/SwN8llV4bvw">Martin Scorsese's Favorite Films</a></td><td class="sorting_1">2017/01/07</td><td>1,457</td><td>Titles</td><td>12</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>13</td><td><a target="_blank" href="https://www.imdb.com/poll/wG1VT4Oqsmc">Best Director Never Nominated for ''Best Director'' Oscar</a></td><td class="sorting_1">2017/01/08</td><td>3,719</td><td>People</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>14</td><td><a target="_blank" href="https://www.imdb.com/poll/jTk7NEVDKEc">Best Cyberpunk Film</a></td><td class="sorting_1">2017/01/08</td><td>20,394</td><td>Titles</td><td>35</td><td>Yes (1)</td><td>Live</td></tr><tr class="odd"><td>15</td><td><a target="_blank" href="https://www.imdb.com/poll/kE3pTce6u7E">BAFTA 2017 - Films with Multiple Nominations</a></td><td class="sorting_1">2017/01/16</td><td>1,903</td><td>Titles</td><td>13</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>16</td><td><a target="_blank" href="https://www.imdb.com/poll/rZTmqjTQ4fg">Films with Five or More Golden Globe Awards</a></td><td class="sorting_1">2017/01/21</td><td>920</td><td>Titles</td><td>7</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>17</td><td><a target="_blank" href="https://www.imdb.com/poll/ouS9myNpOfE">Face Off : The Dark Knight Trilogy</a></td><td class="sorting_1">2017/01/27</td><td>1,545</td><td>Titles</td><td>3</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>18</td><td><a target="_blank" href="https://www.imdb.com/poll/ffxWayQnk-4">Oscars 2017 - Best Writing, Screenplay Based on Material Previously Produced or Published</a></td><td class="sorting_1">2017/02/05</td><td>1,183</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>19</td><td><a target="_blank" href="https://www.imdb.com/poll/qX0KJxBrrEI">Oscars 2017 - Best Achievement in Visual Effects</a></td><td class="sorting_1">2017/02/09</td><td>12,105</td><td>Titles</td><td>5</td><td>Yes (1)</td><td>Live</td></tr><tr class="even"><td>20</td><td><a target="_blank" href="https://www.imdb.com/poll/SSFSo1Fths8">Films Rated by 1 Million Users</a></td><td class="sorting_1">2017/02/11</td><td>9,331</td><td>Titles</td><td>18</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>21</td><td><a target="_blank" href="https://www.imdb.com/poll/l-tPTvjJNnM">African-American Milestones in Movies and TV</a></td><td class="sorting_1">2017/02/13</td><td>616</td><td>Images</td><td>25</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>22</td><td><a target="_blank" href="https://www.imdb.com/poll/O26FROwZ2Tc">Oscars 2017 - Best Achievement in Production Design</a></td><td class="sorting_1">2017/02/15</td><td>809</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>23</td><td><a target="_blank" href="https://www.imdb.com/poll/sm2kXBdYNG4">Best TV Show Based on Book</a></td><td class="sorting_1">2017/02/15</td><td>3,594</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>24</td><td><a target="_blank" href="https://www.imdb.com/poll/X_VqQAfjUf0">Face-Off: Rachel McAdams's Time-Traveling Partners</a></td><td class="sorting_1">2017/02/16</td><td>460</td><td>Characters</td><td>3</td><td>No (0)</td><td>Deleted</td></tr><tr class="odd"><td>25</td><td><a target="_blank" href="https://www.imdb.com/poll/WMMM29R5FpM">BAFTA 2017 - Favorite Winner</a></td><td class="sorting_1">2017/02/19</td><td>1,226</td><td>Images</td><td>24</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>26</td><td><a target="_blank" href="https://www.imdb.com/poll/wjTIpremQJg">Favorite Performance at the 2017 Grammy Awards</a></td><td class="sorting_1">2017/02/20</td><td>386</td><td>Images</td><td>12</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>27</td><td><a target="_blank" href="https://www.imdb.com/poll/BCnH_4Lorbw">2017 Oscars: Top Moments From the Ceremony</a></td><td class="sorting_1">2017/02/27</td><td>654</td><td>Images</td><td>12</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>28</td><td><a target="_blank" href="https://www.imdb.com/poll/tl7o8YJ6-Bs">Favorite Friends Episode</a></td><td class="sorting_1">2017/03/11</td><td>698</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>29</td><td><a target="_blank" href="https://www.imdb.com/poll/yfM-eJmoLeA">Saturn Award 2017: Best Superhero Adaptation Television Series</a></td><td class="sorting_1">2017/03/16</td><td>1,212</td><td>Titles</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>30</td><td><a target="_blank" href="https://www.imdb.com/poll/XxmpSUwcUWU">Saturn Award 2017: Best Thriller Film</a></td><td class="sorting_1">2017/03/20</td><td>15,383</td><td>Titles</td><td>7</td><td>Yes (1)</td><td>Live</td></tr><tr class="odd"><td>31</td><td><a target="_blank" href="https://www.imdb.com/poll/Viy7KrAeLSk">Favorite Power Ranger TV Show</a></td><td class="sorting_1">2017/04/05</td><td>838</td><td>Titles</td><td>19</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>32</td><td><a target="_blank" href="https://www.imdb.com/poll/9WmB7wXJSf8">Saturn Award 2017: Best International Film</a></td><td class="sorting_1">2017/04/06</td><td>6,477</td><td>Titles</td><td>6</td><td>Yes (1)</td><td>Live</td></tr><tr class="odd"><td>33</td><td><a target="_blank" href="https://www.imdb.com/poll/rktobEfBw9E">Favorite "American" Film</a></td><td class="sorting_1">2017/04/09</td><td>1,474</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>34</td><td><a target="_blank" href="https://www.imdb.com/poll/yMAaPzzb5qQ">Race Against Time</a></td><td class="sorting_1">2017/06/19</td><td>1,641</td><td>Titles</td><td>28</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>35</td><td><a target="_blank" href="https://www.imdb.com/poll/gAPK74F0pCc">Primetime Emmy Awards 2017 - Outstanding Reality Competition Program</a></td><td class="sorting_1">2017/09/06</td><td>8,689</td><td>Titles</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>36</td><td><a target="_blank" href="https://www.imdb.com/poll/03HppUQfTvU">Highest Grossing 3D Films</a></td><td class="sorting_1">2017/11/11</td><td>989</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>37</td><td><a target="_blank" href="https://www.imdb.com/poll/xvYjviUoecU">Best Black Sitcom</a></td><td class="sorting_1">2017/11/16</td><td>745</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>38</td><td><a target="_blank" href="https://www.imdb.com/poll/VNSssCKpoYc">Face-Off: 'John Wick' vs. 'John Wick: Chapter 2'</a></td><td class="sorting_1">2017/11/17</td><td>976</td><td>Titles</td><td>2</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>39</td><td><a target="_blank" href="https://www.imdb.com/poll/ZDiMRFzOU5A">Golden Globes 2018 — Best Television Series, Drama</a></td><td class="sorting_1">2017/12/18</td><td>13,888</td><td>Titles</td><td>5</td><td>Yes (1)</td><td>Live</td></tr><tr class="even"><td>40</td><td><a target="_blank" href="https://www.imdb.com/poll/NeHr9YRbBuk">Golden Globes 2018 — Best Television Series, Musical or Comedy</a></td><td class="sorting_1">2017/12/19</td><td>443</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>41</td><td><a target="_blank" href="https://www.imdb.com/poll/PStKbbscOPU">Golden Globes 2018 — Best Motion Picture, Musical or Comedy</a></td><td class="sorting_1">2017/12/31</td><td>1,180</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>42</td><td><a target="_blank" href="https://www.imdb.com/poll/He9tU2vhCz4">23rd Critics' Choice Awards — Best Acting Ensemble</a></td><td class="sorting_1">2018/01/03</td><td>857</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>43</td><td><a target="_blank" href="https://www.imdb.com/poll/sQfFyyyZOIM">Meryl Streep: Golden Globe Champion </a></td><td class="sorting_1">2018/01/06</td><td>498</td><td>Titles</td><td>31</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>44</td><td><a target="_blank" href="https://www.imdb.com/poll/ZHcF--J8CbU">SAG Awards 2018 — Outstanding Performance by a Cast in a Motion Picture</a></td><td class="sorting_1">2018/01/08</td><td>710</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>45</td><td><a target="_blank" href="https://www.imdb.com/poll/XQ0fwMbON3g">Oscars 2018 — Best Live Action Short Film
 </a></td><td class="sorting_1">2018/02/26</td><td>4,975</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>46</td><td><a target="_blank" href="https://www.imdb.com/poll/JPA7KMnq2XY">Favorite 90s Sitcom</a></td><td class="sorting_1">2018/03/15</td><td>9,766</td><td>Titles</td><td>35</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>47</td><td><a target="_blank" href="https://www.imdb.com/poll/Bjyp6V_O_eI">Emmys 2018 — Outstanding Variety Talk Series	</a></td><td class="sorting_1">2018/07/19</td><td>294</td><td>Titles</td><td>6</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>48</td><td><a target="_blank" href="https://www.imdb.com/poll/ycQ47TW6_HQ">Emmys 2018 — Outstanding Comedy Series</a></td><td class="sorting_1">2018/08/06</td><td>442</td><td>Titles</td><td>8</td><td>No (0)</td><td>Live</td></tr><tr class="odd"><td>49</td><td><a target="_blank" href="https://www.imdb.com/poll/msWdZGnz-98">Face-Off: James Spader's TV shows</a></td><td class="sorting_1">2018/11/02</td><td>277</td><td>Titles</td><td>2</td><td>No (0)</td><td>Live</td></tr><tr class="even"><td>50</td><td><a target="_blank" href="https://www.imdb.com/poll/8DxZUa8P5e0">Golden Globes 2019 — Best Screenplay</a></td><td class="sorting_1">2018/12/29</td><td>695</td><td>Titles</td><td>5</td><td>No (0)</td><td>Live</td></tr>
@@ -70,7 +207,6 @@
                 <tr class="even"><td>130</td><td><a target="_blank" href="https://www.imdb.com/poll/WIIOd7Ht0hA">Who Is the Ultimate Sitcom Womanizer?</a></td><td class="sorting_1">2025/07/02</td><td>60</td><td>People</td><td>15</td><td>No (0)</td><td>Live</td></tr>
                 <tr class="odd"><td>131</td><td><a target="_blank" href="https://www.imdb.com/poll/SGV1Sm2eFgQ">Favorite John Cena Persona</a></td><td class="sorting_1">2025/07/03</td><td>75</td><td>Images</td><td>10</td><td>No (0)</td><td>Live</td></tr>
             `;
-
             pollListDiv.innerHTML = ''; // Clear previous poll list
 
             try {
@@ -83,7 +219,7 @@
 
                 if (tbody) {
                     const rows = tbody.querySelectorAll('tr');
-                    rows.forEach(row => {
+                    rows.forEach((row, index) => {
                         const cells = row.children; // Get all td elements in the row
 
                         // Extract data from each cell
@@ -100,33 +236,49 @@
 
                         // Create a new div element for each poll
                         const pollItem = document.createElement('div');
-                        // Updated Tailwind classes for a more appealing card design
-                        pollItem.className = 'poll-item bg-white p-6 rounded-xl shadow-lg flex flex-col space-y-3';
+                        pollItem.className = 'poll-item bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl flex flex-col space-y-4 fade-in';
+                        pollItem.style.animationDelay = `${index * 0.1}s`;
 
                         // Create and append elements for each detail
-                        const numberElement = document.createElement('p');
-                        numberElement.className = 'text-sm font-bold text-gray-500 mb-1';
-                        numberElement.textContent = `#${pollNumber}`;
+                        const numberElement = document.createElement('div');
+                        numberElement.className = 'flex items-center justify-between mb-2';
+                        numberElement.innerHTML = `
+                            <span class="poll-number text-2xl font-black">#${pollNumber}</span>
+                            <span class="px-3 py-1 bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs font-bold rounded-full">
+                                ${pollStatus}
+                            </span>
+                        `;
                         pollItem.appendChild(numberElement);
 
                         const titleLink = document.createElement('a');
                         titleLink.href = pollUrl;
                         titleLink.textContent = pollTitle;
                         titleLink.target = '_blank';
-                        // Updated Tailwind classes for the link
-                        titleLink.className = 'poll-link text-xl font-bold text-indigo-700 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75';
+                        titleLink.className = 'poll-link text-xl font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 block mb-4';
                         pollItem.appendChild(titleLink);
 
                         const detailsContainer = document.createElement('div');
-                        // Updated Tailwind classes for the details grid
-                        detailsContainer.className = 'text-sm text-gray-700 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 mt-2';
+                        detailsContainer.className = 'stats-grid';
 
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Date:</span> ${pollDate}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Votes:</span> ${pollVotes}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Type:</span> ${pollType}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Options:</span> ${pollOptions}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Featured:</span> ${pollFeatured}</p>`;
-                        detailsContainer.innerHTML += `<p><span class="font-semibold text-gray-800">Status:</span> ${pollStatus}</p>`;
+                        const details = [
+                            { label: 'Date', value: pollDate, icon: '📅' },
+                            { label: 'Votes', value: pollVotes, icon: '🗳️' },
+                            { label: 'Type', value: pollType, icon: '📊' },
+                            { label: 'Options', value: pollOptions, icon: '🎯' },
+                            { label: 'Featured', value: pollFeatured, icon: '⭐' },
+                            { label: 'Status', value: pollStatus, icon: '🔄' }
+                        ];
+
+                        details.forEach(detail => {
+                            const detailItem = document.createElement('div');
+                            detailItem.className = 'stat-item p-3 rounded-lg text-center';
+                            detailItem.innerHTML = `
+                                <div class="text-lg mb-1">${detail.icon}</div>
+                                <div class="text-xs font-semibold text-gray-600 mb-1">${detail.label}</div>
+                                <div class="text-sm font-bold text-gray-800">${detail.value}</div>
+                            `;
+                            detailsContainer.appendChild(detailItem);
+                        });
 
                         pollItem.appendChild(detailsContainer);
 
