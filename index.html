@@ -1,204 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMDb Polls</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>IMDb Polls</title>
+   <!-- Tailwind CSS CDN -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+   <style>
+      /* Custom styles */
+      body {
+         font-family: 'Inter', sans-serif;
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         min-height: 100vh;
+         position: relative;
+         overflow-x: hidden;
+      }
 
-        /* Animated background elements */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
-            pointer-events: none;
-            z-index: -1;
-        }
+      /* Animated background elements */
+      body::before {
+         content: '';
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+         pointer-events: none;
+         z-index: -1;
+      }
 
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            position: relative;
-            z-index: 1;
-        }
+      .container {
+         max-width: 1200px;
+         width: 100%;
+         position: relative;
+         z-index: 1;
+      }
 
-        .poll-item {
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            position: relative;
-            overflow: hidden;
-        }
+      .poll-item {
+         transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         backdrop-filter: blur(10px);
+         background: rgba(255, 255, 255, 0.95);
+         position: relative;
+         overflow: hidden;
+      }
 
-        .poll-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
+      .poll-item::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: -100%;
+         width: 100%;
+         height: 100%;
+         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+         transition: left 0.6s;
+      }
+
+      .poll-item:hover::before {
+         left: 100%;
+      }
+
+      .poll-item:hover {
+         transform: translateY(-10px) scale(1.03);
+         box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+         background: rgba(255, 255, 255, 0.98);
+      }
+
+      .poll-link {
+         transition: all 0.3s ease;
+         background: linear-gradient(135deg, #667eea, #764ba2);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+         position: relative;
+      }
+
+      .poll-link:hover {
+         transform: translateY(-2px);
+         text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-gradient {
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+         position: relative;
+         overflow: hidden;
+      }
+
+      .header-gradient::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: -100%;
+         width: 100%;
+         height: 100%;
+         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+         animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+         0% {
             left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            transition: left 0.6s;
-        }
+         }
 
-        .poll-item:hover::before {
+         100% {
             left: 100%;
-        }
+         }
+      }
 
-        .poll-item:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            background: rgba(255, 255, 255, 0.98);
-        }
+      .detail-badge {
+         transition: all 0.3s ease;
+         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
 
-        .poll-link {
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
+      .detail-badge:hover {
+         transform: scale(1.05);
+         box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+      }
 
-        .poll-link:hover {
-            transform: translateY(-2px);
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+      .poll-number {
+         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+         font-weight: 800;
+      }
 
-        .header-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            position: relative;
-            overflow: hidden;
-        }
+      .loading-animation {
+         animation: pulse 2s infinite;
+      }
 
-        .header-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 3s infinite;
-        }
+      @keyframes pulse {
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
+         0%,
+         100% {
+            opacity: 1;
+         }
 
-        .detail-badge {
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
+         50% {
+            opacity: 0.5;
+         }
+      }
 
-        .detail-badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-        }
+      .fade-in {
+         animation: fadeIn 0.6s ease-out forwards;
+      }
 
-        .poll-number {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 800;
-        }
+      @keyframes fadeIn {
+         from {
+            opacity: 0;
+            transform: translateY(30px);
+         }
 
-        .loading-animation {
-            animation: pulse 2s infinite;
-        }
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
+      }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+      .stats-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+         gap: 0.5rem;
+      }
 
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
+      .stat-item {
+         background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+         backdrop-filter: blur(5px);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         transition: all 0.3s ease;
+      }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+      .stat-item:hover {
+         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+         transform: translateY(-2px);
+      }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.5rem;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-            transform: translateY(-2px);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+         .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+         }
+      }
+   </style>
 </head>
+
 <body class="antialiased text-gray-800">
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="text-center mb-12">
-            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-4 header-gradient rounded-2xl p-8 shadow-2xl tracking-tight">
-                🎬 My IMDb Polls
-            </h1>
-            <p class="text-lg sm:text-xl text-white/90 font-medium max-w-2xl mx-auto">
-                All my polls from the IMDb community
-            </p>
-        </header>
+   <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+      <header class="text-center mb-12">
+         <h1
+            class="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-4 header-gradient rounded-2xl p-8 shadow-2xl tracking-tight">
+            🎬 My IMDb Polls
+         </h1>
+         <p class="text-lg sm:text-xl text-white/90 font-medium max-w-2xl mx-auto">
+            All my polls from the IMDb community
+         </p>
+      </header>
 
-        <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Polls will be dynamically loaded here -->
-        </div>
-    </div>
+      <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+         <!-- Polls will be dynamically loaded here -->
+      </div>
+   </div>
 
-    <script>
-        // Get references to DOM elements
-        const pollListDiv = document.getElementById('poll-list');
+   <script>
+      // Get references to DOM elements
+      const pollListDiv = document.getElementById('poll-list');
 
-        /**
-         * Parses the provided static HTML content and displays the poll links with all details.
-         */
-        function displayPollsFromStaticHtml() {
-            // Combined HTML content from polls 1-131
+      /**
+       * Parses the provided static HTML content and displays the poll links with all details.
+       */
+      function displayPollsFromStaticHtml() {
+         // Combined HTML content from polls 1-131
 
-            const htmlText = `
+         const htmlText = `
                 <tr class="odd">
    <td>1</td>
    <td><a target="_blank" href="https://www.imdb.com/poll/P-naOk64Gik">Saturn Award 2016: Best Science Fiction Film</a></td>
@@ -1522,95 +1539,96 @@
    <td>Live</td>
 </tr>
             `;
-            pollListDiv.innerHTML = ''; // Clear previous poll list
+         pollListDiv.innerHTML = ''; // Clear previous poll list
 
-            try {
-                // Parse the HTML string into a temporary DOM document
-                const parser = new DOMParser();
-                const tempDoc = parser.parseFromString(`<table><tbody>${htmlText}</tbody></table>`, 'text/html');
+         try {
+            // Parse the HTML string into a temporary DOM document
+            const parser = new DOMParser();
+            const tempDoc = parser.parseFromString(`<table><tbody>${htmlText}</tbody></table>`, 'text/html');
 
-                // Find the tbody within the temporary document
-                const tbody = tempDoc.querySelector('tbody');
+            // Find the tbody within the temporary document
+            const tbody = tempDoc.querySelector('tbody');
 
-                if (tbody) {
-                    const rows = tbody.querySelectorAll('tr');
-                    rows.forEach((row, index) => {
-                        const cells = row.children; // Get all td elements in the row
+            if (tbody) {
+               const rows = tbody.querySelectorAll('tr');
+               rows.forEach((row, index) => {
+                  const cells = row.children; // Get all td elements in the row
 
-                        // Extract data from each cell
-                        const pollNumber = cells[0] ? cells[0].textContent : 'N/A';
-                        const titleAnchor = cells[1] ? cells[1].querySelector('a') : null;
-                        const pollTitle = titleAnchor ? titleAnchor.textContent : 'N/A';
-                        const pollUrl = titleAnchor ? titleAnchor.href : '#';
-                        const pollDate = cells[2] ? cells[2].textContent : 'N/A';
-                        const pollVotes = cells[3] ? cells[3].textContent : 'N/A';
-                        const pollType = cells[4] ? cells[4].textContent : 'N/A';
-                        const pollOptions = cells[5] ? cells[5].textContent : 'N/A';
-                        const pollFeatured = cells[6] ? cells[6].textContent : 'N/A';
-                        const pollStatus = cells[7] ? cells[7].textContent : 'N/A';
+                  // Extract data from each cell
+                  const pollNumber = cells[0] ? cells[0].textContent : 'N/A';
+                  const titleAnchor = cells[1] ? cells[1].querySelector('a') : null;
+                  const pollTitle = titleAnchor ? titleAnchor.textContent : 'N/A';
+                  const pollUrl = titleAnchor ? titleAnchor.href : '#';
+                  const pollDate = cells[2] ? cells[2].textContent : 'N/A';
+                  const pollVotes = cells[3] ? cells[3].textContent : 'N/A';
+                  const pollType = cells[4] ? cells[4].textContent : 'N/A';
+                  const pollOptions = cells[5] ? cells[5].textContent : 'N/A';
+                  const pollFeatured = cells[6] ? cells[6].textContent : 'N/A';
+                  const pollStatus = cells[7] ? cells[7].textContent : 'N/A';
 
-                        // Create a new div element for each poll
-                        const pollItem = document.createElement('div');
-                        pollItem.className = 'poll-item bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl flex flex-col space-y-4 fade-in';
-                        pollItem.style.animationDelay = `${index * 0.1}s`;
+                  // Create a new div element for each poll
+                  const pollItem = document.createElement('div');
+                  pollItem.className = 'poll-item bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl flex flex-col space-y-4 fade-in';
+                  pollItem.style.animationDelay = `${index * 0.1}s`;
 
-                        // Create and append elements for each detail
-                        const numberElement = document.createElement('div');
-                        numberElement.className = 'flex items-center justify-between mb-2';
-                        numberElement.innerHTML = `
+                  // Create and append elements for each detail
+                  const numberElement = document.createElement('div');
+                  numberElement.className = 'flex items-center justify-between mb-2';
+                  numberElement.innerHTML = `
                             <span class="poll-number text-2xl font-black">#${pollNumber}</span>
                             <span class="px-3 py-1 bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs font-bold rounded-full">
                                 ${pollStatus}
                             </span>
                         `;
-                        pollItem.appendChild(numberElement);
+                  pollItem.appendChild(numberElement);
 
-                        const titleLink = document.createElement('a');
-                        titleLink.href = pollUrl;
-                        titleLink.textContent = pollTitle;
-                        titleLink.target = '_blank';
-                        titleLink.className = 'poll-link text-xl font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 block mb-4';
-                        pollItem.appendChild(titleLink);
+                  const titleLink = document.createElement('a');
+                  titleLink.href = pollUrl;
+                  titleLink.textContent = pollTitle;
+                  titleLink.target = '_blank';
+                  titleLink.className = 'poll-link text-xl font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 block mb-4';
+                  pollItem.appendChild(titleLink);
 
-                        const detailsContainer = document.createElement('div');
-                        detailsContainer.className = 'stats-grid';
+                  const detailsContainer = document.createElement('div');
+                  detailsContainer.className = 'stats-grid';
 
-                        const details = [
-                            { label: 'Date', value: pollDate, icon: '📅' },
-                            { label: 'Votes', value: pollVotes, icon: '🗳️' },
-                            { label: 'Type', value: pollType, icon: '📊' },
-                            { label: 'Options', value: pollOptions, icon: '🎯' },
-                            { label: 'Featured', value: pollFeatured, icon: '⭐' },
-                            { label: 'Status', value: pollStatus, icon: '🔄' }
-                        ];
+                  const details = [
+                     { label: 'Date', value: pollDate, icon: '📅' },
+                     { label: 'Votes', value: pollVotes, icon: '🗳️' },
+                     { label: 'Type', value: pollType, icon: '📊' },
+                     { label: 'Options', value: pollOptions, icon: '🎯' },
+                     { label: 'Featured', value: pollFeatured, icon: '⭐' },
+                     { label: 'Status', value: pollStatus, icon: '🔄' }
+                  ];
 
-                        details.forEach(detail => {
-                            const detailItem = document.createElement('div');
-                            detailItem.className = 'stat-item p-3 rounded-lg text-center';
-                            detailItem.innerHTML = `
+                  details.forEach(detail => {
+                     const detailItem = document.createElement('div');
+                     detailItem.className = 'stat-item p-3 rounded-lg text-center';
+                     detailItem.innerHTML = `
                                 <div class="text-lg mb-1">${detail.icon}</div>
                                 <div class="text-xs font-semibold text-gray-600 mb-1">${detail.label}</div>
                                 <div class="text-sm font-bold text-gray-800">${detail.value}</div>
                             `;
-                            detailsContainer.appendChild(detailItem);
-                        });
+                     detailsContainer.appendChild(detailItem);
+                  });
 
-                        pollItem.appendChild(detailsContainer);
+                  pollItem.appendChild(detailsContainer);
 
-                        // Append the poll item to the main poll list container
-                        pollListDiv.appendChild(pollItem);
-                    });
-                } else {
-                    console.error('Could not find tbody in the provided HTML.');
-                }
-
-            } catch (error) {
-                console.error('Error parsing static HTML for polls:', error);
+                  // Append the poll item to the main poll list container
+                  pollListDiv.appendChild(pollItem);
+               });
+            } else {
+               console.error('Could not find tbody in the provided HTML.');
             }
-        }
 
-        // Call the function to display polls when the page loads
-        document.addEventListener('DOMContentLoaded', displayPollsFromStaticHtml);
-    </script>
+         } catch (error) {
+            console.error('Error parsing static HTML for polls:', error);
+         }
+      }
+
+      // Call the function to display polls when the page loads
+      document.addEventListener('DOMContentLoaded', displayPollsFromStaticHtml);
+   </script>
 </body>
+
 </html>
