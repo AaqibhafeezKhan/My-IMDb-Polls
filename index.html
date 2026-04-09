@@ -5,13 +5,10 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>IMDb Polls</title>
-   <!-- Tailwind CSS CDN -->
    <script src="https://cdn.tailwindcss.com"></script>
-   <!-- Google Fonts -->
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet">
    <style>
-      /* Custom styles */
       body {
          font-family: 'Inter', sans-serif;
          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +17,6 @@
          overflow-x: hidden;
       }
 
-      /* Animated background elements */
       body::before {
          content: '';
          position: fixed;
@@ -179,7 +175,6 @@
          transform: translateY(-2px);
       }
 
-      /* Responsive adjustments */
       @media (max-width: 768px) {
          .stats-grid {
             grid-template-columns: repeat(2, 1fr);
@@ -201,19 +196,13 @@
       </header>
 
       <div id="poll-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-         <!-- Polls will be dynamically loaded here -->
       </div>
    </div>
 
    <script>
-      // Get references to DOM elements
       const pollListDiv = document.getElementById('poll-list');
 
-      /**
-       * Parses the provided static HTML content and displays the poll links with all details.
-       */
       function displayPollsFromStaticHtml() {
-         // Combined HTML content from polls 1-131
 
          const htmlText = `
                 <tr class="odd">
@@ -1631,22 +1620,19 @@
    <td>Live</td>
 </tr>
             `;
-         pollListDiv.innerHTML = ''; // Clear previous poll list
+         pollListDiv.innerHTML = '';
 
          try {
-            // Parse the HTML string into a temporary DOM document
             const parser = new DOMParser();
             const tempDoc = parser.parseFromString(`<table><tbody>${htmlText}</tbody></table>`, 'text/html');
 
-            // Find the tbody within the temporary document
             const tbody = tempDoc.querySelector('tbody');
 
             if (tbody) {
                const rows = tbody.querySelectorAll('tr');
                rows.forEach((row, index) => {
-                  const cells = row.children; // Get all td elements in the row
+                  const cells = row.children;
 
-                  // Extract data from each cell
                   const pollNumber = cells[0] ? cells[0].textContent : 'N/A';
                   const titleAnchor = cells[1] ? cells[1].querySelector('a') : null;
                   const pollTitle = titleAnchor ? titleAnchor.textContent : 'N/A';
@@ -1658,12 +1644,10 @@
                   const pollFeatured = cells[6] ? cells[6].textContent : 'N/A';
                   const pollStatus = cells[7] ? cells[7].textContent : 'N/A';
 
-                  // Create a new div element for each poll
                   const pollItem = document.createElement('div');
                   pollItem.className = 'poll-item bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl flex flex-col space-y-4 fade-in';
                   pollItem.style.animationDelay = `${index * 0.1}s`;
 
-                  // Create and append elements for each detail
                   const numberElement = document.createElement('div');
                   numberElement.className = 'flex items-center justify-between mb-2';
                   numberElement.innerHTML = `
@@ -1706,7 +1690,6 @@
 
                   pollItem.appendChild(detailsContainer);
 
-                  // Append the poll item to the main poll list container
                   pollListDiv.appendChild(pollItem);
                });
             } else {
@@ -1718,7 +1701,6 @@
          }
       }
 
-      // Call the function to display polls when the page loads
       document.addEventListener('DOMContentLoaded', displayPollsFromStaticHtml);
    </script>
 </body>
